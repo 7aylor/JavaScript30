@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transform-origin: 100%;
+      transition-timing-function: cubic-bezier(0.07, 2.54, 0.04, 0.95);
+    }
+
+  </style>
+
+  <script>
+    //get elements in page
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+
+    //set up date vars
+    const now = new Date();
+    let totalSeconds = now.getSeconds();
+    let totalMins = now.getMinutes();
+    let totalHours = now.getHours();
+    
+    //init current time on page load
+    window.onload = function() {
+      setTime();
+    }
+
+    //set hand positions
+    function setTime() {
+      //every tick, update second
+      totalSeconds++;
+      
+      //if we have gone 60 seconds, update minute
+      if(totalSeconds % 60 == 0) {
+        totalMins++;
+      }
+      //if we have gone 60 minutes, update hour
+      if(totalMins % 60 == 0) {
+        totalHours++;
+      }
+
+      //convert time to degrees
+      const secondsDegrees = toDegrees(totalSeconds);
+      const minutesDegrees = toDegrees(totalMins);
+      const hoursDegrees = toDegrees(totalHours);
+
+      //set the rotation of our elements
+      setRotation(secondHand, secondsDegrees);
+      setRotation(minuteHand, minutesDegrees);
+      setRotation(hourHand, hoursDegrees);
+    }
+
+    //convert time to degrees
+    function toDegrees(time) {
+      return ((time / 60) * 360) + 90;
+    }
+
+    //set rotation style on elements
+    function setRotation(hand, degrees) {
+      hand.style.transform = `rotate(${degrees}deg)`;
+    }
+
+    setInterval(setTime, 1000);
+
+  </script>
+</body>
+</html>
