@@ -33,6 +33,11 @@ body {
   width: 100%;
 }
 
+.fullscreen {
+  width: 100vw;
+  height: 100vh;
+}
+
 .player:-webkit-full-screen {
   max-width: none;
   width: 100%;
